@@ -5,19 +5,27 @@ from nltk.corpus import stopwords
 from string import punctuation
 
 def build_dataframe():
-    df = pd.DataFrame(columns=["label", "description", "text"])
+    df_test = pd.DataFrame(columns=["condition_label", "medical_abstract"])
+    df_train = pd.DataFrame(columns=["condition_label", "medical_abstract"])
     med_stopwords = open("../data/clinical-stopwords.txt").read().split()
+    label_map = {1: 'neoplasms',  2: 'digestive', 3: 'nervous', 4:'cardiovascular', 5:'pathological'}
 
-    def make_df_from_dir(df):
+    def make_df_from_dir(df_train, df_test):
         # Get the path of data folders
         path = "../data/raw_data"
         dir_list = os.listdir(path)
         for dirs in dir_list:
             df_text = pd.read_csv(path + '/' + dirs)
-            df = pd.concat([df, df_text], ignore_index=True)
-        df = df.drop(columns = ['description'])
-        return df
-    
+            if 'test' in dirs:
+                df_test = pd.concat([df_test, df_text], ignore_index=True)
+                df_test = df_test.rename(columns={"condition_label":"label", "medical_abstract":"text"})
+                df_test['label_str'] = df_test['label'].map(label_map)
+            elif 'train' in dirs:
+                df_train = pd.concat([df_train, df_text], ignore_index=True)
+                df_train = df_train.rename(columns={"condition_label":"label", "medical_abstract":"text"})
+                df_train['label_str'] = df_train['label'].map(label_map)
+        return df_train, df_test
+
     def preprocess_df(df):
         eng_stopwords = set(stopwords.words('english'))
         numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -40,10 +48,14 @@ def build_dataframe():
             df.iloc[i, 1] = ' '.join(cleaned_text)
         return df
 
-    df = make_df_from_dir(df)
-    df = preprocess_df(df)
-    return df
+    df_train, df_test = make_df_from_dir(df_train, df_test)
+    df_train = preprocess_df(df_train)
+    df_test = preprocess_df(df_test)
+    return df_train, df_test
 
 
-df = build_dataframe()
-df.to_csv("../data/data_final.csv")
+df_train, df_test = build_dataframe()
+df = pd.concat([df_train, df_test], ignore_index=True)
+df_train.to_csv("../data/train_cleaned.csv")
+df_test.to_csv("../data/test_cleaned.csv")
+df = df.to_csv("../data/datat_cleaned.csv")
