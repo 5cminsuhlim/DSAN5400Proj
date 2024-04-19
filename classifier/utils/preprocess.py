@@ -7,7 +7,7 @@ from string import punctuation
 def build_dataframe():
     df_test = pd.DataFrame(columns=["condition_label", "medical_abstract"])
     df_train = pd.DataFrame(columns=["condition_label", "medical_abstract"])
-    med_stopwords = open("../data/clinical-stopwords.txt").read().split()
+    med_stopwords = open("../../data/clinical-stopwords.txt").read().split()
     label_map = {1: 'neoplasms',  2: 'digestive', 3: 'nervous', 4:'cardiovascular', 5:'pathological'}
 
     def make_df_from_dir(df_train, df_test):
@@ -56,6 +56,6 @@ def build_dataframe():
 
 df_train, df_test = build_dataframe()
 df = pd.concat([df_train, df_test], ignore_index=True)
-df_train.to_csv("../data/train_cleaned.csv")
-df_test.to_csv("../data/test_cleaned.csv")
-df = df.to_csv("../data/datat_cleaned.csv")
+df_train.to_csv("../../data/train_cleaned.csv")
+df_test.to_csv("../../data/test_cleaned.csv")
+df = df.to_csv("../../data/data_cleaned.csv")
