@@ -171,6 +171,7 @@ class Word2VecVectorizer(Vectorizer):
     def train_model(self, size=100, window=5, min_count=2, workers=4):
         self.model = Word2Vec(sentences=self.df['tokenized_text'], vector_size=size, window=window, min_count=min_count, workers=workers)
         self.df['doc_vector'] = self.df['tokenized_text'].apply(self.document_vector)
+        print(self.df['doc_vector'])
                 
     def visualize_heatmap(self, model_type="Word2Vec"):
         self.visualize_heatmap(model_type)
@@ -186,6 +187,7 @@ class Doc2VecVectorizer(Vectorizer):
         tagged_data = [TaggedDocument(words=_d, tags=[str(i)]) for i, _d in enumerate(self.df['tokenized_text'])]
         self.model = Doc2Vec(tagged_data, vector_size=size, window=window, min_count=min_count, workers=workers)
         self.df['doc_vector'] = [self.model.dv[str(i)] for i in range(len(self.df))]
+        print(self.df['doc_vector'])
     
     def visualize_heatmap(self, model_type="Doc2Vec"):
         self.visualize_heatmap(model_type)
