@@ -1,31 +1,43 @@
 # ref: https://stackoverflow.com/questions/72268814/importing-python-function-from-outside-of-the-current-folder
-import sys
 import os
+import sys
+import logging
+import argparse
+from pathlib import Path
 
-### SET UP ###
-print("Current Working Directory:", os.getcwd())
-
-# add the parent directory to sys.path so Python can find the utils module
-script_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.join(script_dir, '..'))
-
-
-### MAIN SCRIPT ###
+from utils import setup_logging, setup_data_path
 from eda import Word2VecVectorizer, Doc2VecVectorizer
 
+def main(model_type, visualize_flag):
+    """ 
+    Main function to process data using Word2Vec or Doc2Vec vectorization.
 
-# using full cleaned dataset for visualizations
-data_path = os.path.join(script_dir, '..', '..', 'data', 'data_cleaned.csv')
-print("Data Path:", data_path)
+    Args:
+        model_type (str): Type of model to use ('word2vec' or 'doc2vec').
+        visualize_flag (bool): Whether to run visualization functions.
+    """
+    setup_logging(model_type)
+    data_path = setup_data_path()
+    
+    if model_type == 'word2vec':
+        vectorizer = Word2VecVectorizer(data_path)
+    elif model_type == 'doc2vec':
+        vectorizer = Doc2VecVectorizer(data_path)
+    else:
+        raise ValueError("Model type must be 'word2vec' or 'doc2vec'")
 
-word2vec_processor = Word2VecVectorizer(data_path)
-word2vec_processor.train_model(size=100, window=5, min_count=2, workers=4)
-# word2vec_processor.calculate_similarities()
-# word2vec_processor.visualize_heatmap()
-word2vec_processor.visualize_datamap()
+    vectorizer.train_model()
+    
+    if visualize_flag:
+        vectorizer.calculate_similarities()
+        vectorizer.visualize_heatmap()
+        vectorizer.visualize_datamap()
 
-# doc2vec_processor = Doc2VecVectorizer(path)
-# doc2vec_processor.train_model(size=100, window=5, min_count=2, workers=4)
-# doc2vec_processor.calculate_similarities()
-# doc2vec_processor.visualize_heatmap()
-# doc2vec_processor.visualize_datamap()
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Medical Text Data Classification")
+    parser.add_argument("-m", "--model", choices=['word2vec', 'doc2vec'], required=True, help="Model type to use for processing")
+    parser.add_argument("-v", "--visualize", action='store_true', help="Flag to run visualization functions")
+    args = parser.parse_args()
+
+    # call main function
+    main(args.model, args.visualize)
