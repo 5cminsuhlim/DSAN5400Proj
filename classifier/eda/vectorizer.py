@@ -1,6 +1,7 @@
 ### IMPORTS ###
 import umap
 import nltk
+import logging
 import panel as pn
 import numpy as np
 import pandas as pd
@@ -111,6 +112,7 @@ class Vectorizer:
         """
         Calculates intra-class and inter-class similarities using cosine and Jaccard metrics and updates the respective attribute dictionaries
         """
+        logging.info("Calculating similarities...")
         for label in self.unique_labels:
             vectors = self.df[self.df['label'] == label]['doc_vector'].tolist()
             if not vectors:
@@ -119,9 +121,11 @@ class Vectorizer:
             # intra-class similarities
             cosine_sim_matrix = cosine_similarity(vectors)
             self.intra_class_cosine_sim[label] = np.nanmean(np.where(np.eye(len(vectors)) == 1, np.nan, cosine_sim_matrix))
+            logging.info(f"Cosine similarity matrix for label {label}: {cosine_sim_matrix}")
             
             jaccard_sim_matrix = self.jaccard_similarity_matrix(vectors)
             self.intra_class_jaccard_sim[label] = np.nanmean(np.where(np.eye(len(vectors)) == 1, np.nan, jaccard_sim_matrix))
+            logging.info(f"Jaccard similarity matrix for label {label}: {jaccard_sim_matrix}")
 
         # inter-class similarities
         for i in range(len(self.unique_labels)):
@@ -131,6 +135,8 @@ class Vectorizer:
                 if vectors_i and vectors_j:
                     self.inter_class_cosine_sim[(self.unique_labels[i], self.unique_labels[j])] = np.mean(cosine_similarity(vectors_i, vectors_j))
                     self.inter_class_jaccard_sim[(self.unique_labels[i], self.unique_labels[j])] = np.mean(self.jaccard_similarity_matrix(vectors_i + vectors_j))
+        
+        logging.info("Similarity calculations complete!")
         
     def visualize_heatmap(self):
         """
@@ -155,11 +161,6 @@ class Vectorizer:
                                             self.inter_class_cosine_sim.get(reverse_key, 0))
                     jaccard_matrix[i, j] = self.inter_class_jaccard_sim.get(inter_key, 
                                             self.inter_class_jaccard_sim.get(reverse_key, 0))
-
-        # print("Cosine Similarity Matrix:")
-        # print(cosine_matrix)
-        # print("Jaccard Similarity Matrix:")
-        # print(jaccard_matrix)
 
         # plot
         fig, axes = plt.subplots(1, 2, figsize=(15, 12))
@@ -219,7 +220,6 @@ class Vectorizer:
             max_point_size=0.05,
             title=f'{self.model_type} Data Map',
         )
-        # print(hover_text)
         pn.Row(enriched_plot).show()
 
         
@@ -233,15 +233,18 @@ class Word2VecVectorizer(Vectorizer):
     def __init__(self, data_path):
         super().__init__(data_path)
         self.model_type = "Word2Vec"
+        logging.info(f"Initializing {self.model_type} Vectorizer with data from {data_path}")
         
     def document_vector(self, doc):
         doc = [word for word in doc if word in self.model.wv.index_to_key]
         return np.mean(self.model.wv[doc], axis=0) if len(doc) > 0 else np.zeros(self.model.vector_size)
     
     def train_model(self, size=100, window=5, min_count=2, workers=4):
+        logging.info(f"Training {self.model_type} Vectorizer: size={size}, window={window}, min_count={min_count}, workers={workers}")
         self.model = Word2Vec(sentences=self.df['tokenized_text'], vector_size=size, window=window, min_count=min_count, workers=workers)
         self.df['doc_vector'] = self.df['tokenized_text'].apply(self.document_vector)
-        print(self.df['doc_vector'])
+        logging.info("Training {self.model_type} Vectorizer complete!")
+        logging.info(f"{self.model_type} Vectorizer document vectors after training: {self.df['doc_vector'].head()}") # logging first few to keep logfile size under control
                 
     def visualize_heatmap(self, model_type="Word2Vec"):
         self.visualize_heatmap(model_type)
@@ -256,12 +259,15 @@ class Doc2VecVectorizer(Vectorizer):
     def __init__(self, data_path):
         super().__init__(data_path)
         self.model_type = "Doc2Vec"
+        logging.info(f"Initializing {self.model_type} Vectorizer with data from {data_path}")
         
     def train_model(self, size=100, window=5, min_count=2, workers=4):
+        logging.info(f"Training {self.model_type} Vectorizer: size={size}, window={window}, min_count={min_count}, workers={workers}")
         tagged_data = [TaggedDocument(words=_d, tags=[str(i)]) for i, _d in enumerate(self.df['tokenized_text'])]
         self.model = Doc2Vec(tagged_data, vector_size=size, window=window, min_count=min_count, workers=workers)
         self.df['doc_vector'] = [self.model.dv[str(i)] for i in range(len(self.df))]
-        print(self.df['doc_vector'])
+        logging.info("Training {self.model_type} Vectorizer complete!")
+        logging.info(f"{self.model_type} Vectorizer document vectors after training: {self.df['doc_vector'].head()}") # logging first few to keep logfile size under control
     
     def visualize_heatmap(self, model_type="Doc2Vec"):
         self.visualize_heatmap(model_type)
