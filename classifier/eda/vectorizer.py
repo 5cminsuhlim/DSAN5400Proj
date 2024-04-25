@@ -92,7 +92,7 @@ class Vectorizer:
         """
         Compute a Jaccard similarity matrix for a list of boolean vectors
 
-        Parameters:
+        Args:
             vectors (list of arrays): A list of boolean vectors
 
         Returns:
