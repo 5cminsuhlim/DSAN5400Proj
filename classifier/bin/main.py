@@ -8,7 +8,7 @@ from pathlib import Path
 from utils import setup_logging, setup_data_path
 from eda import Word2VecVectorizer, Doc2VecVectorizer
 
-def main(model_type, visualize_flag):
+def main(model_type, visualize_flag, clf):
     """ 
     Main function to process data using Word2Vec or Doc2Vec vectorization.
 
@@ -32,12 +32,15 @@ def main(model_type, visualize_flag):
         vectorizer.calculate_similarities()
         vectorizer.visualize_heatmap()
         vectorizer.visualize_datamap()
+    
+    # TO DO: ADD CLASSIFICATION STUFF FROM HERE + UPDATE `main` DOCSTRING
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Medical Text Data Classification")
     parser.add_argument("-m", "--model", choices=['word2vec', 'doc2vec'], required=True, help="Model type to use for processing")
     parser.add_argument("-v", "--visualize", action='store_true', help="Flag to run visualization functions")
+    parser.add_argument("-c", "--classifier", choices=['rnn', 'xgb', 'nb'], help="Model type to use for classification")
     args = parser.parse_args()
 
     # call main function
-    main(args.model, args.visualize)
+    main(args.model, args.visualize, args.classifier)
