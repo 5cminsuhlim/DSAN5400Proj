@@ -72,7 +72,3 @@ class dfBuilder:
         logging.info("Train and test sets saved to CSV with names: train_cleaned, test_cleaned and data_cleaned.")
 
 
-df = dfBuilder()
-df.save_to_csv()
-
-
