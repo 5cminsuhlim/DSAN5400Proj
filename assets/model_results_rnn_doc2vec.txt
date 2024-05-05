@@ -1,0 +1,57 @@
+Model Architecture:
+
+Model: "sequential_14"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ lstm_20 (LSTM)              (None, 1, 128)            117248    
+                                                                 
+ dropout_19 (Dropout)        (None, 1, 128)            0         
+                                                                 
+ lstm_21 (LSTM)              (None, 64)                49408     
+                                                                 
+ dropout_20 (Dropout)        (None, 64)                0         
+                                                                 
+ dense_13 (Dense)            (None, 5)                 325       
+                                                                 
+=================================================================
+Total params: 166981 (652.27 KB)
+Trainable params: 166981 (652.27 KB)
+Non-trainable params: 0 (0.00 Byte)
+_________________________________________________________________
+
+
+Model Training:
+Epoch 1/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4455 - accuracy: 0.3717 - val_loss: 1.5072 - val_accuracy: 0.3420
+Epoch 2/20
+325/325 [==============================] - 2s 5ms/step - loss: 1.4406 - accuracy: 0.3716 - val_loss: 1.5133 - val_accuracy: 0.3429
+Epoch 3/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4390 - accuracy: 0.3739 - val_loss: 1.5072 - val_accuracy: 0.3489
+Epoch 4/20
+325/325 [==============================] - 2s 5ms/step - loss: 1.4365 - accuracy: 0.3757 - val_loss: 1.5064 - val_accuracy: 0.3359
+Epoch 5/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4333 - accuracy: 0.3766 - val_loss: 1.5116 - val_accuracy: 0.3377
+Epoch 6/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4328 - accuracy: 0.3743 - val_loss: 1.5091 - val_accuracy: 0.3420
+Epoch 7/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4266 - accuracy: 0.3804 - val_loss: 1.5071 - val_accuracy: 0.3368
+Epoch 8/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4238 - accuracy: 0.3805 - val_loss: 1.5036 - val_accuracy: 0.3506
+Epoch 9/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4220 - accuracy: 0.3799 - val_loss: 1.5041 - val_accuracy: 0.3420
+Epoch 10/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4176 - accuracy: 0.3833 - val_loss: 1.5098 - val_accuracy: 0.3498
+Epoch 11/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4186 - accuracy: 0.3865 - val_loss: 1.5099 - val_accuracy: 0.3446
+Epoch 12/20
+325/325 [==============================] - 2s 6ms/step - loss: 1.4113 - accuracy: 0.3902 - val_loss: 1.5072 - val_accuracy: 0.3437
+Epoch 13/20
+316/325 [============================>.] - ETA: 0s - loss: 1.4097 - accuracy: 0.3912Restoring model weights from the end of the best epoch: 8.
+325/325 [==============================] - 2s 6ms/step - loss: 1.4104 - accuracy: 0.3909 - val_loss: 1.5128 - val_accuracy: 0.3463
+Epoch 13: early stopping
+
+Final Model Results:
+91/91 [==============================] - 0s 3ms/step - loss: 1.4881 - accuracy: 0.3563
+Test Loss: 1.4881010055541992
+Test Accuracy: 0.3563019335269928
