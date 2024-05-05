@@ -8,6 +8,8 @@
 # Overview
 In this project, we utilize a corpus of biomedical documents, specifically the abstracts from published papers. These documents describe five different classes of patient conditions such as neoplasms, digestive, nervous, cardiovascular, and pathological. The project carries out several Natural Language Processing practices such as vectorization (Word2Vec and Doc2Vec) and classification (via Naive Bayes, XGBoost, and Recurrent Neural Networks).
 
+![](/assets/workflow_diagram.svg)
+
 # Setup
 
 ## Data
