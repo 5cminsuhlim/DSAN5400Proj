@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from classifier.vectorizer import Word2VecVectorizer, Doc2VecVectorizer
+from src.vectorizer import Word2VecVectorizer, Doc2VecVectorizer
 
 
 ### SET UP ###
