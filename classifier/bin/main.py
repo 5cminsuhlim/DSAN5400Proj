@@ -115,7 +115,6 @@ def main(model_type, visualize_flag, clf):
         vectorizer.visualize_datamap()
 
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Medical Text Data Classification")
     parser.add_argument(
