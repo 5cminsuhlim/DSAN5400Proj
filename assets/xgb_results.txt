@@ -1,2 +1,0 @@
-Best parameters: {'learning_rate': 0.2, 'max_depth': 3}
-Accuracy: 49.13%

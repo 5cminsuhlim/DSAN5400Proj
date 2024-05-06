@@ -1,0 +1,1 @@
+Accuracy with Word2Vec: 0.2884349030470914
