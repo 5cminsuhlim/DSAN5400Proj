@@ -4,7 +4,8 @@ import sys
 import logging
 import argparse
 from pathlib import Path
-
+import matplotlib.pyplot as plt
+from PIL import Image
 from utils import setup_logging, setup_data_path
 from eda import Word2VecVectorizer, Doc2VecVectorizer
 
@@ -15,14 +16,83 @@ def main(model_type, visualize_flag, clf):
     Args:
         model_type (str): Type of model to use ('word2vec' or 'doc2vec').
         visualize_flag (bool): Whether to run visualization functions.
+        clf (str): Type of classifier to use ('nb' or 'rnn' or 'xgb')
     """
     setup_logging(model_type)
     data_path = setup_data_path()
     
     if model_type == 'word2vec':
         vectorizer = Word2VecVectorizer(data_path)
+        if clf == "rnn":
+            try:
+                with open("../../assets/model_results_rnn_word2vec.txt", 'r') as f:
+                    contents = f.read()
+                    print(contents)
+            except FileNotFoundError:
+                print("Failed to open model results")
+
+            try:
+                img = Image.open("../../assets/model_results_word2vec.png")
+                plt.imshow(img)
+                plt.axis('off')
+                plt.title('Model Results - Word2Vec')
+                plt.show()
+            except FileNotFoundError:
+                print(f"Failed to find or open the image")
+
+        elif clf == "nb":
+            try:
+                with open("../../assets/nb_results_word2vec.txt", 'r') as f:
+                    contents = f.read()
+                    print(contents)
+            except FileNotFoundError:
+                print("Failed to open model results")
+        elif clf == "xgb":
+            try:
+                with open("../../assets/xgb_results_word2vec.txt", 'r') as f:
+                    contents = f.read()
+                    print(contents)
+            except FileNotFoundError:
+                print("Failed to open model results")  
+
+        else:
+            print("Error. Enter a valid model type ['xgb', 'rnn', 'nb']")         
     elif model_type == 'doc2vec':
         vectorizer = Doc2VecVectorizer(data_path)
+        if clf == "rnn":
+            try:
+                with open("../../assets/model_results_rnn_doc2vec.txt", 'r') as f:
+                    contents = f.read()
+                    print(contents)
+            except FileNotFoundError:
+                print("Failed to open model results")
+
+            try:
+                img = Image.open("../../assets/model_results_doc2vec.png")
+                plt.imshow(img)
+                plt.axis('off')  
+                plt.title('Model Results - Doc2Vec')
+                plt.show()
+            except FileNotFoundError:
+                print(f"Failed to find or open the image")
+
+        elif clf == "nb":
+            try:
+                with open("../../assets/nb_results_doc2vec.txt", 'r') as f:
+                    contents = f.read()
+                    print(contents)
+            except FileNotFoundError:
+                print("Failed to open model results")
+        elif clf == "xgb":
+            try:
+                with open("../../assets/xgb_results_doc2vec.txt", 'r') as f:
+                    contents = f.read()
+                    print(contents)
+            except FileNotFoundError:
+                print("Failed to open model results")  
+
+        else:
+            print("Error. Enter a valid model type ['xgb', 'rnn', 'nb']")
     else:
         raise ValueError("Model type must be 'word2vec' or 'doc2vec'")
 
@@ -33,7 +103,9 @@ def main(model_type, visualize_flag, clf):
         vectorizer.visualize_heatmap()
         vectorizer.visualize_datamap()
     
-    # TO DO: ADD CLASSIFICATION STUFF FROM HERE + UPDATE `main` DOCSTRING
+
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Medical Text Data Classification")
