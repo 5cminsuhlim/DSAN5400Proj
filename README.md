@@ -23,4 +23,4 @@ Run the command `conda env create --name NAME --file ./requirements.yml` from th
 # How to Run
 To run the Classifier, navigate to the top directory and run `python ./classifier/bin/main.py -m [word2vec, doc2vec] -v -c [rnn, xgb, nb]`
 
-To run unit tests, navigate to the top directory (i.e. where `pytest.ini` is located) and run `pytest`
+To run unit tests, navigate to the top directory and run `pytest`
