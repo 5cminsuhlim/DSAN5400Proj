@@ -23,6 +23,7 @@ def main(model_type, visualize_flag, clf):
     
     if model_type == 'word2vec':
         vectorizer = Word2VecVectorizer(data_path)
+        # open rnn model results
         if clf == "rnn":
             try:
                 with open("../../assets/model_results_rnn_word2vec.txt", 'r') as f:
@@ -31,6 +32,7 @@ def main(model_type, visualize_flag, clf):
             except FileNotFoundError:
                 print("Failed to open model results")
 
+            # open training plot
             try:
                 img = Image.open("../../assets/model_results_word2vec.png")
                 plt.imshow(img)
@@ -42,6 +44,7 @@ def main(model_type, visualize_flag, clf):
 
         elif clf == "nb":
             try:
+                # open nb results
                 with open("../../assets/nb_results_word2vec.txt", 'r') as f:
                     contents = f.read()
                     print(contents)
@@ -49,6 +52,7 @@ def main(model_type, visualize_flag, clf):
                 print("Failed to open model results")
         elif clf == "xgb":
             try:
+                # open xgb results
                 with open("../../assets/xgb_results_word2vec.txt", 'r') as f:
                     contents = f.read()
                     print(contents)
@@ -58,9 +62,11 @@ def main(model_type, visualize_flag, clf):
         else:
             print("Error. Enter a valid model type ['xgb', 'rnn', 'nb']")         
     elif model_type == 'doc2vec':
+        # doc2vec vectorizer
         vectorizer = Doc2VecVectorizer(data_path)
         if clf == "rnn":
             try:
+                # open rnn results
                 with open("../../assets/model_results_rnn_doc2vec.txt", 'r') as f:
                     contents = f.read()
                     print(contents)
@@ -68,6 +74,7 @@ def main(model_type, visualize_flag, clf):
                 print("Failed to open model results")
 
             try:
+                # open training plot
                 img = Image.open("../../assets/model_results_doc2vec.png")
                 plt.imshow(img)
                 plt.axis('off')  
@@ -78,6 +85,7 @@ def main(model_type, visualize_flag, clf):
 
         elif clf == "nb":
             try:
+                # open nb results
                 with open("../../assets/nb_results_doc2vec.txt", 'r') as f:
                     contents = f.read()
                     print(contents)
@@ -85,6 +93,7 @@ def main(model_type, visualize_flag, clf):
                 print("Failed to open model results")
         elif clf == "xgb":
             try:
+                # open xgb results
                 with open("../../assets/xgb_results_doc2vec.txt", 'r') as f:
                     contents = f.read()
                     print(contents)
@@ -92,8 +101,9 @@ def main(model_type, visualize_flag, clf):
                 print("Failed to open model results")  
 
         else:
-            print("Error. Enter a valid model type ['xgb', 'rnn', 'nb']")
+            raise ValueError("Error. Enter a valid model type ['xgb', 'rnn', 'nb']")
     else:
+        # error handling
         raise ValueError("Model type must be 'word2vec' or 'doc2vec'")
 
     vectorizer.train_model()
